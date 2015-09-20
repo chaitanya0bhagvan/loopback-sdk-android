@@ -242,7 +242,22 @@ public class RestAdapter extends Adapter {
                 }
                 Log.w(TAG, "HTTP request (string) failed: " + message);
             }
-            callback.onError(error);
+
+            String responseBodyString = statusCode + "\n";
+            try {
+                responseBodyString += new String(responseBody, getCharset());
+            } catch (UnsupportedEncodingException e) {
+                responseBodyString += new String(responseBody);
+            }
+            catch (Exception e) {
+                responseBodyString = "UNKNOWN EXCEPTION: " + e.getMessage();
+            }
+            catch (Throwable t) {
+                responseBodyString = "UNKNOWN EXCEPTION: " + t.getMessage();
+            }
+
+            LoopbackThrowable throwableError = new LoopbackThrowable(responseBodyString, error);
+            callback.onError(throwableError);
         }
     }
 
@@ -273,7 +288,22 @@ public class RestAdapter extends Adapter {
                 }
                 Log.w(TAG, "HTTP request (binary) failed: " + message);
             }
-            callback.onError(error);
+
+            String responseBodyString = statusCode + "\n";
+            try {
+                responseBodyString += new String(responseBody, getCharset());
+            } catch (UnsupportedEncodingException e) {
+                responseBodyString += new String(responseBody);
+            }
+            catch (Exception e) {
+                responseBodyString = "UNKNOWN EXCEPTION: " + e.getMessage();
+            }
+            catch (Throwable t) {
+                responseBodyString = "UNKNOWN EXCEPTION: " + t.getMessage();
+            }
+
+            LoopbackThrowable throwableError = new LoopbackThrowable(responseBodyString, error);
+            callback.onError(throwableError);
         }
 
         @Override
@@ -346,6 +376,7 @@ public class RestAdapter extends Adapter {
 
             this.context = context;
             this.baseUrl = baseUrl;
+            setURLEncodingEnabled(false);
 
             // Make sure base url ends with a trailing slash.
             if (!this.baseUrl.endsWith("/")) {

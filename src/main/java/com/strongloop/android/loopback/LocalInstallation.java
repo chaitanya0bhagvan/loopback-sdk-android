@@ -134,6 +134,10 @@ public class LocalInstallation {
         return id;
     }
 
+    public void setId(Object id) {
+        this.id = id;
+    }
+
     /**
      * @return The id of the LoopBack Application object this Installation
      * is bound to.
@@ -337,7 +341,7 @@ public class LocalInstallation {
             deviceToken = prefs.getString(PROPERTY_DEVICE_TOKEN, null);
     }
 
-    private void saveInstallationId() {
+    protected void saveInstallationId() {
         final SharedPreferences.Editor editor = getSharedPreferences().edit();
         final String json = new JSONArray().put(id).toString();
         editor.putString(PROPERTY_INSTALLATION_ID, json);

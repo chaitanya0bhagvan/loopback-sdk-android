@@ -54,7 +54,7 @@ public class UserRepository<U extends User> extends ModelRepository<U> {
     private AccessTokenRepository accessTokenRepository;
     private Object currentUserId;
     private boolean isCurrentUserIdLoaded;
-    private U cachedCurrentUser;
+    protected U cachedCurrentUser;
 
     private AccessTokenRepository getAccessTokenRepository() {
         if (accessTokenRepository == null) {
@@ -297,7 +297,12 @@ public class UserRepository<U extends User> extends ModelRepository<U> {
 
         try {
             Object id = new JSONArray(json).get(0);
-            setCurrentUserId(id);
+            if(id == null || id.toString().equals("null")) {
+                isCurrentUserIdLoaded = false;
+            }
+            else {
+                setCurrentUserId(id);
+            }
         } catch (JSONException e) {
             String msg = "Cannot parse current user id '" + json + "'";
             Log.e("LoopBack", msg, e);
