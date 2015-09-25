@@ -265,3 +265,7 @@ dependencies {
 //    }
 //    compileReleaseJava.dependsOn printCompilerInput
 //}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7' //version required
+}
